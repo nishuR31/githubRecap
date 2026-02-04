@@ -1,0 +1,22 @@
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+  binaryTargets = ["native", "linux-musl", "debian-openssl-3.0.x"]
+}
+
+model RecapData {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  year      Int      @unique
+  title     String?
+  payload   Json?    @default("{}")
+  imageUrl  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("recap_data")
+}

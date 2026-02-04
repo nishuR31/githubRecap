@@ -1,0 +1,52 @@
+{
+  "name": "github-recap-backend",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "GitHub Recap Backend - Microservices Architecture",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node index.js",
+    "start": "node index.js",
+    "start:appService": "node appService/index.js",
+    "start:dataService": "node dataService/index.js",
+    "start:gateway": "node gateway/index.js",
+    "start:worker": "node sharedService/queue/worker.js",
+    "build:appService": "npx prisma generate --schema=appService/prisma/schema.prisma",
+    "build:dataService": "npx prisma generate --schema=dataService/prisma/schema.prisma",
+    "build:prisma": "npm run build:appService && npm run build:dataService",
+    "db:push": "npx prisma db push --schema=appService/prisma/schema.prisma",
+    "db:push:data": "npx prisma db push --schema=dataService/prisma/schema.prisma",
+    "test": "jest --detectOpenHandles",
+    "audit": "npm audit"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.7.1",
+    "axios": "^1.13.4",
+    "bcrypt": "^6.0.0",
+    "bullmq": "^5.67.2",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.6",
+    "dotenv": "^17.2.3",
+    "envf": "^3.1.1",
+    "express": "^5.2.1",
+    "express-rate-limit": "^8.2.1",
+    "helmet": "^7.1.0",
+    "http-proxy-middleware": "^2.0.6",
+    "imgbb-uploader": "^1.5.1",
+    "ioredis": "^5.9.2",
+    "joi": "^18.0.2",
+    "jsonwebtoken": "^9.0.3",
+    "morgan": "^1.10.0",
+    "multer": "^2.0.2",
+    "nodemailer": "^8.0.0",
+    "status-map": "^1.0.7",
+    "winston": "^3.18.3"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.10.5",
+    "eslint": "^8.56.0",
+    "jest": "^29.7.0",
+    "prisma": "^7.3.0"
+  }
+}
