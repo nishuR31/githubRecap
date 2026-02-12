@@ -1,7 +1,7 @@
-import { useParams, useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
-import { Helmet } from 'react-helmet-async';
+import { useParams, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import { Helmet } from "react-helmet-async";
 import {
   GitCommit,
   GitPullRequest,
@@ -16,28 +16,35 @@ import {
   ArrowLeft,
   RefreshCw,
   AlertTriangle,
-} from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { useToast } from '@/hooks/use-toast';
-import { useGitHubRecap } from '@/hooks/useGitHubRecap';
-import { getSettings, getRecapByYear } from '@/lib/recapStorage';
-import { mockRecapData, GitHubRecap } from '@/lib/mockData';
-import { HeroSection } from '@/components/recap/HeroSection';
-import { StatCard } from '@/components/recap/StatCard';
-import { ContributionHeatmap } from '@/components/recap/ContributionHeatmap';
-import { LanguageChart } from '@/components/recap/LanguageChart';
-import { RepositoryCard } from '@/components/recap/RepositoryCard';
-import { InsightCard } from '@/components/recap/InsightCard';
-import { TagBadge } from '@/components/recap/TagBadge';
-import { AnimatedCounter } from '@/components/recap/AnimatedCounter';
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
+import { useGitHubRecap } from "@/hooks/useGitHubRecap";
+import { getSettings, getRecapByYear } from "@/lib/recapStorage";
+import { mockRecapData, GitHubRecap } from "@/lib/mockData";
+import { HeroSection } from "@/components/recap/HeroSection";
+import { StatCard } from "@/components/recap/StatCard";
+import { ContributionHeatmap } from "@/components/recap/ContributionHeatmap";
+import { LanguageChart } from "@/components/recap/LanguageChart";
+import { RepositoryCard } from "@/components/recap/RepositoryCard";
+import { InsightCard } from "@/components/recap/InsightCard";
+import { TagBadge } from "@/components/recap/TagBadge";
+import { AnimatedCounter } from "@/components/recap/AnimatedCounter";
 
 const RecapYear = () => {
   const { year } = useParams<{ year: string }>();
   const navigate = useNavigate();
   const { toast } = useToast();
   const targetYear = year ? parseInt(year) : new Date().getFullYear();
-  
-  const { data: fetchedData, isLoading, error, useMock, fromCache, fetchRecap } = useGitHubRecap(targetYear);
+
+  const {
+    data: fetchedData,
+    isLoading,
+    error,
+    useMock,
+    fromCache,
+    fetchRecap,
+  } = useGitHubRecap(targetYear);
   const [data, setData] = useState<GitHubRecap | null>(null);
   const settings = getSettings();
 
@@ -63,11 +70,11 @@ const RecapYear = () => {
 
   const handleShare = async () => {
     const url = window.location.href;
-    
+
     if (navigator.share) {
       try {
         await navigator.share({
-          title: `GitHub Recap ${targetYear} - ${data?.username || 'Developer'}`,
+          title: `GitHub Recap ${targetYear} - ${data?.username || "Developer"}`,
           text: `Check out my GitHub activity recap for ${targetYear}!`,
           url,
         });
@@ -76,7 +83,7 @@ const RecapYear = () => {
       }
     } else {
       await navigator.clipboard.writeText(url);
-      toast({ title: 'Link copied to clipboard!' });
+      toast({ title: "Link copied to clipboard!" });
     }
   };
 
@@ -88,11 +95,7 @@ const RecapYear = () => {
   if (isLoading && !data) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="text-center"
-        >
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center">
           <RefreshCw className="w-12 h-12 text-primary mx-auto mb-4 animate-spin" />
           <p className="text-muted-foreground">Loading recap for {targetYear}...</p>
         </motion.div>
@@ -110,13 +113,19 @@ const RecapYear = () => {
       <Helmet>
         <title>{`GitHub Recap ${targetYear} - ${displayData.username}`}</title>
         <meta name="description" content={ogDescription} />
-        <meta property="og:title" content={`GitHub Recap ${targetYear} - ${displayData.username}`} />
+        <meta
+          property="og:title"
+          content={`GitHub Recap ${targetYear} - ${displayData.username}`}
+        />
         <meta property="og:description" content={ogDescription} />
         <meta property="og:type" content="website" />
         <meta property="og:url" content={window.location.href} />
         <meta property="og:image" content={displayData.avatarUrl} />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={`GitHub Recap ${targetYear} - ${displayData.username}`} />
+        <meta
+          name="twitter:title"
+          content={`GitHub Recap ${targetYear} - ${displayData.username}`}
+        />
         <meta name="twitter:description" content={ogDescription} />
       </Helmet>
 
@@ -130,7 +139,7 @@ const RecapYear = () => {
           <Button
             variant="outline"
             size="sm"
-            onClick={() => navigate('/')}
+            onClick={() => navigate("/")}
             className="glass-elevated pointer-events-auto"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
@@ -144,14 +153,9 @@ const RecapYear = () => {
               disabled={isLoading}
               className="glass-elevated"
             >
-              <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
+              <RefreshCw className={`w-4 h-4 ${isLoading ? "animate-spin" : ""}`} />
             </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleShare}
-              className="glass-elevated"
-            >
+            <Button variant="outline" size="sm" onClick={handleShare} className="glass-elevated">
               <Share2 className="w-4 h-4 mr-2" />
               Share
             </Button>
@@ -165,15 +169,15 @@ const RecapYear = () => {
             animate={{ opacity: 1, y: 0 }}
             className={`fixed top-16 left-4 right-4 z-40 p-3 rounded-lg text-sm flex items-center gap-2 ${
               error
-                ? 'bg-destructive/20 border border-destructive/30 text-destructive'
+                ? "bg-destructive/20 border border-destructive/30 text-destructive"
                 : useMock
-                ? 'bg-yellow-500/20 border border-yellow-500/30 text-yellow-200'
-                : 'bg-muted/50 border border-border text-muted-foreground'
+                  ? "bg-yellow-500/20 border border-yellow-500/30 text-yellow-200"
+                  : "bg-muted/50 border border-border text-muted-foreground"
             }`}
           >
             <AlertTriangle className="w-4 h-4 flex-shrink-0" />
             <span>
-              {error || (useMock ? 'Showing sample data (API unavailable)' : 'Loaded from cache')}
+              {error || (useMock ? "Showing sample data (API unavailable)" : "Loaded from cache")}
             </span>
           </motion.div>
         )}
@@ -190,9 +194,7 @@ const RecapYear = () => {
               viewport={{ once: true }}
               className="text-center mb-16"
             >
-              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-                The Numbers
-              </h2>
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">The Numbers</h2>
               <p className="text-muted-foreground max-w-md mx-auto">
                 Your engineering output, quantified and visualized.
               </p>
@@ -246,9 +248,7 @@ const RecapYear = () => {
               viewport={{ once: true }}
               className="text-center mb-16"
             >
-              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-                Code Impact
-              </h2>
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">Code Impact</h2>
               <p className="text-muted-foreground max-w-md mx-auto">
                 Lines written, deleted, and the balance of creation.
               </p>
@@ -300,10 +300,8 @@ const RecapYear = () => {
         <section className="py-12 px-4">
           <div className="container max-w-6xl mx-auto">
             <div className="grid lg:grid-cols-2 gap-8">
-              {settings.showLanguages && (
-                <LanguageChart languages={displayData.topLanguages} />
-              )}
-              
+              {settings.showLanguages && <LanguageChart languages={displayData.topLanguages} />}
+
               {settings.showRepositories && (
                 <div className="space-y-4">
                   <motion.h3
@@ -389,14 +387,10 @@ const RecapYear = () => {
               viewport={{ once: true }}
               className="text-center mb-8"
             >
-              <h3 className="text-xl font-semibold text-foreground mb-2">
-                Your Engineering Focus
-              </h3>
-              <p className="text-sm text-muted-foreground">
-                The areas you invested your time in
-              </p>
+              <h3 className="text-xl font-semibold text-foreground mb-2">Your Engineering Focus</h3>
+              <p className="text-sm text-muted-foreground">The areas you invested your time in</p>
             </motion.div>
-            
+
             <div className="flex flex-wrap justify-center gap-3">
               {displayData.tags.map((tag, index) => (
                 <TagBadge key={tag} tag={tag} delay={index * 0.1} />
@@ -415,12 +409,10 @@ const RecapYear = () => {
               className="glass-elevated rounded-3xl p-12 border-gradient glow-primary"
             >
               <Zap className="w-12 h-12 text-primary mx-auto mb-6" />
-              <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-4">
-                Keep Building
-              </h2>
+              <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-4">Keep Building</h2>
               <p className="text-muted-foreground mb-8">
-                Every commit tells a story. Every line of code shapes your journey.
-                Here's to another year of shipping.
+                Every commit tells a story. Every line of code shapes your journey. Here's to
+                another year of shipping.
               </p>
               <Button onClick={handleShare} size="lg">
                 <Share2 className="w-4 h-4 mr-2" />
@@ -433,9 +425,7 @@ const RecapYear = () => {
         {/* Footer */}
         <footer className="py-8 px-4 border-t border-border/50">
           <div className="container max-w-6xl mx-auto text-center">
-            <p className="text-sm text-muted-foreground">
-              Built with data, designed with purpose.
-            </p>
+            <p className="text-sm text-muted-foreground">Built with data, designed with purpose.</p>
           </div>
         </footer>
       </div>

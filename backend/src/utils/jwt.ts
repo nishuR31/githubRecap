@@ -3,11 +3,10 @@ import jwt from "jsonwebtoken";
 const ACCESS_EXPIRES_IN = "7d";
 const REFRESH_EXPIRES_IN = "15d";
 
-export function sign(payload: any, type: "access" | "refresh" = "access") {
+export function token(payload: any, type: "access" | "refresh" = "access") {
   const expiresIn = type === "refresh" ? REFRESH_EXPIRES_IN : ACCESS_EXPIRES_IN;
   return jwt.sign({ ...payload, type }, process.env.JWT_SECRET!, { expiresIn });
 }
-
 
 export function verifyAccess(token: string) {
   const decoded = jwt.verify(token, process.env.JWT_SECRET!) as any;

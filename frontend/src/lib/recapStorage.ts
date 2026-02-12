@@ -1,12 +1,12 @@
 // Local storage management for recap settings and data
 // This can be replaced with database calls when backend is connected
 
-import { GitHubRecap } from './mockData';
+import { GitHubRecap } from "./mockData";
 
 const STORAGE_KEYS = {
-  RECAPS: 'github_recaps',
-  SETTINGS: 'recap_settings',
-  ADMIN_AUTH: 'admin_authenticated',
+  RECAPS: "github_recaps",
+  SETTINGS: "recap_settings",
+  ADMIN_AUTH: "admin_authenticated",
 };
 
 export interface RecapSettings {
@@ -30,7 +30,7 @@ export interface StoredRecap {
 }
 
 const DEFAULT_SETTINGS: RecapSettings = {
-  username: 'nishur31',
+  username: "nishur31",
   showHeatmap: true,
   showLanguages: true,
   showRepositories: true,
@@ -49,7 +49,7 @@ export function getSettings(): RecapSettings {
       return { ...DEFAULT_SETTINGS, ...JSON.parse(stored) };
     }
   } catch (e) {
-    console.warn('Failed to load settings:', e);
+    console.warn("Failed to load settings:", e);
   }
   return DEFAULT_SETTINGS;
 }
@@ -69,7 +69,7 @@ export function getStoredRecaps(): StoredRecap[] {
       return JSON.parse(stored);
     }
   } catch (e) {
-    console.warn('Failed to load recaps:', e);
+    console.warn("Failed to load recaps:", e);
   }
   return [];
 }
@@ -82,7 +82,7 @@ export function getRecapByYear(year: number): StoredRecap | null {
 export function saveRecap(data: GitHubRecap): StoredRecap {
   const recaps = getStoredRecaps();
   const existingIndex = recaps.findIndex((r) => r.data.year === data.year);
-  
+
   const recap: StoredRecap = {
     id: `recap-${data.year}`,
     data,
@@ -99,7 +99,7 @@ export function saveRecap(data: GitHubRecap): StoredRecap {
 
   // Sort by year descending
   recaps.sort((a, b) => b.data.year - a.data.year);
-  
+
   localStorage.setItem(STORAGE_KEYS.RECAPS, JSON.stringify(recaps));
   return recap;
 }
@@ -122,15 +122,15 @@ export function deleteRecap(year: number): void {
 
 // Simple admin auth (replace with real auth when backend is ready)
 export function isAdminAuthenticated(): boolean {
-  return localStorage.getItem(STORAGE_KEYS.ADMIN_AUTH) === 'true';
+  return localStorage.getItem(STORAGE_KEYS.ADMIN_AUTH) === "true";
 }
 
 export function setAdminAuthenticated(value: boolean): void {
-  localStorage.setItem(STORAGE_KEYS.ADMIN_AUTH, value ? 'true' : 'false');
+  localStorage.setItem(STORAGE_KEYS.ADMIN_AUTH, value ? "true" : "false");
 }
 
 // Admin password check (simple for now - replace with proper auth)
-const ADMIN_PASSWORD = 'recap2025'; // In production, this would be server-side
+const ADMIN_PASSWORD = "recap2025"; // In production, this would be server-side
 
 export function verifyAdminPassword(password: string): boolean {
   const isValid = password === ADMIN_PASSWORD;

@@ -1,8 +1,8 @@
 // GitHub API Client - Fetches public data with caching and rate limit handling
-import { GitHubRecap, Repository, LanguageStat } from './mockData';
+import { GitHubRecap, Repository, LanguageStat } from "./mockData";
 
-const GITHUB_API_BASE = 'https://api.github.com';
-const CACHE_KEY = 'github_recap_cache';
+const GITHUB_API_BASE = "https://api.github.com";
+const CACHE_KEY = "github_recap_cache";
 const CACHE_DURATION = 1000 * 60 * 60; // 1 hour
 
 interface CachedData {
@@ -35,23 +35,23 @@ interface GitHubRepo {
 
 // Language colors for visualization
 const LANGUAGE_COLORS: Record<string, string> = {
-  TypeScript: 'hsl(200, 80%, 55%)',
-  JavaScript: 'hsl(50, 90%, 55%)',
-  Python: 'hsl(210, 60%, 50%)',
-  Go: 'hsl(190, 70%, 50%)',
-  Rust: 'hsl(15, 80%, 55%)',
-  Java: 'hsl(20, 70%, 50%)',
-  'C++': 'hsl(340, 60%, 55%)',
-  C: 'hsl(220, 50%, 50%)',
-  Ruby: 'hsl(0, 70%, 55%)',
-  PHP: 'hsl(240, 40%, 55%)',
-  Swift: 'hsl(15, 90%, 55%)',
-  Kotlin: 'hsl(270, 60%, 55%)',
-  Dart: 'hsl(195, 80%, 50%)',
-  HTML: 'hsl(15, 80%, 55%)',
-  CSS: 'hsl(260, 60%, 55%)',
-  Shell: 'hsl(120, 40%, 45%)',
-  Other: 'hsl(var(--muted-foreground))',
+  TypeScript: "hsl(200, 80%, 55%)",
+  JavaScript: "hsl(50, 90%, 55%)",
+  Python: "hsl(210, 60%, 50%)",
+  Go: "hsl(190, 70%, 50%)",
+  Rust: "hsl(15, 80%, 55%)",
+  Java: "hsl(20, 70%, 50%)",
+  "C++": "hsl(340, 60%, 55%)",
+  C: "hsl(220, 50%, 50%)",
+  Ruby: "hsl(0, 70%, 55%)",
+  PHP: "hsl(240, 40%, 55%)",
+  Swift: "hsl(15, 90%, 55%)",
+  Kotlin: "hsl(270, 60%, 55%)",
+  Dart: "hsl(195, 80%, 50%)",
+  HTML: "hsl(15, 80%, 55%)",
+  CSS: "hsl(260, 60%, 55%)",
+  Shell: "hsl(120, 40%, 45%)",
+  Other: "hsl(var(--muted-foreground))",
 };
 
 // Check if cached data is valid
@@ -83,7 +83,7 @@ function cacheRecap(data: GitHubRecap, username: string, year: number): void {
     };
     localStorage.setItem(CACHE_KEY, JSON.stringify(cacheData));
   } catch (e) {
-    console.warn('Failed to cache recap data:', e);
+    console.warn("Failed to cache recap data:", e);
   }
 }
 
@@ -107,32 +107,32 @@ async function fetchUserProfile(username: string): Promise<{ avatarUrl: string }
 // Fetch user events (limited to last 90 days by GitHub)
 async function fetchUserEvents(username: string): Promise<GitHubEvent[]> {
   const allEvents: GitHubEvent[] = [];
-  
+
   try {
     // GitHub limits to 10 pages of 30 events each
     for (let page = 1; page <= 10; page++) {
       const response = await fetch(
-        `${GITHUB_API_BASE}/users/${username}/events/public?per_page=100&page=${page}`
+        `${GITHUB_API_BASE}/users/${username}/events/public?per_page=100&page=${page}`,
       );
-      
+
       if (!response.ok) break;
-      
+
       const events: GitHubEvent[] = await response.json();
       if (events.length === 0) break;
-      
+
       allEvents.push(...events);
-      
+
       // Respect rate limits
-      const remaining = response.headers.get('X-RateLimit-Remaining');
+      const remaining = response.headers.get("X-RateLimit-Remaining");
       if (remaining && parseInt(remaining) < 10) {
-        console.warn('Approaching rate limit, stopping event fetch');
+        console.warn("Approaching rate limit, stopping event fetch");
         break;
       }
     }
   } catch (e) {
-    console.warn('Failed to fetch events:', e);
+    console.warn("Failed to fetch events:", e);
   }
-  
+
   return allEvents;
 }
 
@@ -140,7 +140,7 @@ async function fetchUserEvents(username: string): Promise<GitHubEvent[]> {
 async function fetchUserRepos(username: string): Promise<GitHubRepo[]> {
   try {
     const response = await fetch(
-      `${GITHUB_API_BASE}/users/${username}/repos?per_page=100&sort=pushed`
+      `${GITHUB_API_BASE}/users/${username}/repos?per_page=100&sort=pushed`,
     );
     if (!response.ok) return [];
     return await response.json();
@@ -150,13 +150,16 @@ async function fetchUserRepos(username: string): Promise<GitHubRepo[]> {
 }
 
 // Calculate commit streak from events
-function calculateStreaks(events: GitHubEvent[]): { max: number; current: number } {
+function calculateStreaks(events: GitHubEvent[]): {
+  max: number;
+  current: number;
+} {
   const pushEvents = events
-    .filter((e) => e.type === 'PushEvent')
+    .filter((e) => e.type === "PushEvent")
     .map((e) => new Date(e.created_at).toDateString());
 
   const uniqueDays = [...new Set(pushEvents)].sort(
-    (a, b) => new Date(b).getTime() - new Date(a).getTime()
+    (a, b) => new Date(b).getTime() - new Date(a).getTime(),
   );
 
   if (uniqueDays.length === 0) return { max: 0, current: 0 };
@@ -198,7 +201,7 @@ function generateHeatmap(events: GitHubEvent[], year: number): number[][] {
   // Count commits per day
   const commitCounts: Record<string, number> = {};
   events
-    .filter((e) => e.type === 'PushEvent')
+    .filter((e) => e.type === "PushEvent")
     .forEach((e) => {
       const date = new Date(e.created_at);
       if (date >= startOfYear && date <= endOfYear) {
@@ -261,12 +264,12 @@ function findProductivityPatterns(events: GitHubEvent[]): {
   day: string;
   hour: number;
 } {
-  const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
   const dayCounts = new Array(7).fill(0);
   const hourCounts = new Array(24).fill(0);
 
   events
-    .filter((e) => e.type === 'PushEvent')
+    .filter((e) => e.type === "PushEvent")
     .forEach((e) => {
       const date = new Date(e.created_at);
       dayCounts[date.getDay()]++;
@@ -277,7 +280,7 @@ function findProductivityPatterns(events: GitHubEvent[]): {
   const maxHour = hourCounts.indexOf(Math.max(...hourCounts));
 
   return {
-    day: days[maxDayIndex] || 'Tuesday',
+    day: days[maxDayIndex] || "Tuesday",
     hour: maxHour || 14,
   };
 }
@@ -287,31 +290,31 @@ function deriveTags(repos: GitHubRepo[], languages: LanguageStat[]): string[] {
   const tags = new Set<string>();
 
   // From languages
-  if (languages.some((l) => ['TypeScript', 'JavaScript', 'React'].includes(l.name))) {
-    tags.add('frontend');
+  if (languages.some((l) => ["TypeScript", "JavaScript", "React"].includes(l.name))) {
+    tags.add("frontend");
   }
-  if (languages.some((l) => ['Python', 'Go', 'Java', 'Rust'].includes(l.name))) {
-    tags.add('backend');
+  if (languages.some((l) => ["Python", "Go", "Java", "Rust"].includes(l.name))) {
+    tags.add("backend");
   }
-  if (languages.some((l) => ['HCL', 'Shell', 'Dockerfile'].includes(l.name))) {
-    tags.add('infrastructure');
+  if (languages.some((l) => ["HCL", "Shell", "Dockerfile"].includes(l.name))) {
+    tags.add("infrastructure");
   }
-  if (languages.some((l) => ['Python', 'Jupyter Notebook'].includes(l.name))) {
-    tags.add('ml');
+  if (languages.some((l) => ["Python", "Jupyter Notebook"].includes(l.name))) {
+    tags.add("ml");
   }
 
   // From repo names
   repos.forEach((repo) => {
     const name = repo.name.toLowerCase();
-    if (name.includes('api') || name.includes('backend')) tags.add('backend');
-    if (name.includes('ui') || name.includes('frontend')) tags.add('frontend');
-    if (name.includes('infra') || name.includes('terraform')) tags.add('infrastructure');
-    if (name.includes('ml') || name.includes('ai')) tags.add('ml');
+    if (name.includes("api") || name.includes("backend")) tags.add("backend");
+    if (name.includes("ui") || name.includes("frontend")) tags.add("frontend");
+    if (name.includes("infra") || name.includes("terraform")) tags.add("infrastructure");
+    if (name.includes("ml") || name.includes("ai")) tags.add("ml");
   });
 
   // Check if any repos are public (open source)
   if (repos.length > 0) {
-    tags.add('open-source');
+    tags.add("open-source");
   }
 
   return Array.from(tags).slice(0, 5);
@@ -321,7 +324,7 @@ function deriveTags(repos: GitHubRepo[], languages: LanguageStat[]): string[] {
 export async function fetchGitHubRecap(
   username: string,
   year: number = new Date().getFullYear(),
-  forceRefresh: boolean = false
+  forceRefresh: boolean = false,
 ): Promise<{ data: GitHubRecap; fromCache: boolean; error?: string }> {
   // Check cache first
   if (!forceRefresh) {
@@ -350,14 +353,11 @@ export async function fetchGitHubRecap(
     });
 
     // Calculate metrics
-    const pushEvents = yearEvents.filter((e) => e.type === 'PushEvent');
-    const prEvents = yearEvents.filter((e) => e.type === 'PullRequestEvent');
-    const issueEvents = yearEvents.filter((e) => e.type === 'IssuesEvent');
+    const pushEvents = yearEvents.filter((e) => e.type === "PushEvent");
+    const prEvents = yearEvents.filter((e) => e.type === "PullRequestEvent");
+    const issueEvents = yearEvents.filter((e) => e.type === "IssuesEvent");
 
-    const totalCommits = pushEvents.reduce(
-      (sum, e) => sum + (e.payload?.commits?.length || 1),
-      0
-    );
+    const totalCommits = pushEvents.reduce((sum, e) => sum + (e.payload?.commits?.length || 1), 0);
 
     const streaks = calculateStreaks(events);
     const heatmap = generateHeatmap(events, year);
@@ -377,8 +377,8 @@ export async function fetchGitHubRecap(
         name: r.name,
         commits: Math.floor(Math.random() * 200) + 50, // Estimate - would need separate API call
         stars: r.stargazers_count,
-        language: r.language || 'Unknown',
-        description: r.description || 'No description',
+        language: r.language || "Unknown",
+        description: r.description || "No description",
       }));
 
     const recap: GitHubRecap = {
@@ -409,9 +409,9 @@ export async function fetchGitHubRecap(
 
     return { data: recap, fromCache: false };
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Failed to fetch GitHub data';
-    console.error('GitHub API Error:', message);
-    
+    const message = error instanceof Error ? error.message : "Failed to fetch GitHub data";
+    console.error("GitHub API Error:", message);
+
     // Return cached data if available, even if expired
     const cached = getCachedRecap(username, year);
     if (cached) {
@@ -423,7 +423,10 @@ export async function fetchGitHubRecap(
 }
 
 // Check rate limit status
-export async function checkRateLimit(): Promise<{ remaining: number; reset: Date }> {
+export async function checkRateLimit(): Promise<{
+  remaining: number;
+  reset: Date;
+}> {
   try {
     const response = await fetch(`${GITHUB_API_BASE}/rate_limit`);
     const data = await response.json();

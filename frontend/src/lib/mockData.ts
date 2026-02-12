@@ -47,7 +47,7 @@ const generateHeatmap = (): number[][] => {
       const isWeekend = d === 0 || d === 6;
       const baseChance = isWeekend ? 0.3 : 0.7;
       const hasActivity = Math.random() < baseChance;
-      
+
       if (!hasActivity) {
         week.push(0);
       } else {
@@ -108,11 +108,36 @@ export const mockRecapData: GitHubRecap = {
     },
   ],
   topLanguages: [
-    { name: "TypeScript", percentage: 42, color: "hsl(200, 80%, 55%)", linesOfCode: 156000 },
-    { name: "Python", percentage: 28, color: "hsl(45, 90%, 55%)", linesOfCode: 98000 },
-    { name: "Go", percentage: 15, color: "hsl(190, 70%, 50%)", linesOfCode: 52000 },
-    { name: "Rust", percentage: 8, color: "hsl(15, 80%, 55%)", linesOfCode: 28000 },
-    { name: "Other", percentage: 7, color: "hsl(var(--muted-foreground))", linesOfCode: 24000 },
+    {
+      name: "TypeScript",
+      percentage: 42,
+      color: "hsl(200, 80%, 55%)",
+      linesOfCode: 156000,
+    },
+    {
+      name: "Python",
+      percentage: 28,
+      color: "hsl(45, 90%, 55%)",
+      linesOfCode: 98000,
+    },
+    {
+      name: "Go",
+      percentage: 15,
+      color: "hsl(190, 70%, 50%)",
+      linesOfCode: 52000,
+    },
+    {
+      name: "Rust",
+      percentage: 8,
+      color: "hsl(15, 80%, 55%)",
+      linesOfCode: 28000,
+    },
+    {
+      name: "Other",
+      percentage: 7,
+      color: "hsl(var(--muted-foreground))",
+      linesOfCode: 24000,
+    },
   ],
   commitStreakMax: 67,
   commitStreakCurrent: 23,

@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import {
   Settings,
   RefreshCw,
@@ -14,14 +14,14 @@ import {
   Check,
   Database,
   Zap,
-} from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Switch } from '@/components/ui/switch';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { useToast } from '@/hooks/use-toast';
-import { useGitHubRecap } from '@/hooks/useGitHubRecap';
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { useToast } from "@/hooks/use-toast";
+import { useGitHubRecap } from "@/hooks/useGitHubRecap";
 import {
   getSettings,
   saveSettings,
@@ -33,17 +33,20 @@ import {
   logoutAdmin,
   RecapSettings,
   StoredRecap,
-} from '@/lib/recapStorage';
-import { clearRecapCache, checkRateLimit } from '@/lib/githubApi';
+} from "@/lib/recapStorage";
+import { clearRecapCache, checkRateLimit } from "@/lib/githubApi";
 
 const AdminPanel = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [password, setPassword] = useState('');
+  const [password, setPassword] = useState("");
   const [settings, setSettings] = useState<RecapSettings>(getSettings());
   const [storedRecaps, setStoredRecaps] = useState<StoredRecap[]>([]);
-  const [rateLimit, setRateLimit] = useState<{ remaining: number; reset: Date } | null>(null);
+  const [rateLimit, setRateLimit] = useState<{
+    remaining: number;
+    reset: Date;
+  } | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [targetYear, setTargetYear] = useState(new Date().getFullYear());
 
@@ -66,17 +69,17 @@ const AdminPanel = () => {
     if (verifyAdminPassword(password)) {
       setIsAuthenticated(true);
       loadData();
-      toast({ title: 'Logged in successfully' });
+      toast({ title: "Logged in successfully" });
     } else {
-      toast({ title: 'Invalid password', variant: 'destructive' });
+      toast({ title: "Invalid password", variant: "destructive" });
     }
-    setPassword('');
+    setPassword("");
   };
 
   const handleLogout = () => {
     logoutAdmin();
     setIsAuthenticated(false);
-    toast({ title: 'Logged out' });
+    toast({ title: "Logged out" });
   };
 
   const handleGenerateRecap = async () => {
@@ -86,7 +89,7 @@ const AdminPanel = () => {
       setStoredRecaps(getStoredRecaps());
       toast({ title: `Recap for ${targetYear} generated successfully` });
     } catch {
-      toast({ title: 'Failed to generate recap', variant: 'destructive' });
+      toast({ title: "Failed to generate recap", variant: "destructive" });
     } finally {
       setIsGenerating(false);
     }
@@ -95,26 +98,26 @@ const AdminPanel = () => {
   const handleSettingChange = (key: keyof RecapSettings, value: boolean | string) => {
     const updated = saveSettings({ [key]: value });
     setSettings(updated);
-    toast({ title: 'Settings saved' });
+    toast({ title: "Settings saved" });
   };
 
   const handleToggleVisibility = (year: number, isVisible: boolean) => {
     updateRecapVisibility(year, isVisible);
     setStoredRecaps(getStoredRecaps());
-    toast({ title: `Recap ${isVisible ? 'visible' : 'hidden'}` });
+    toast({ title: `Recap ${isVisible ? "visible" : "hidden"}` });
   };
 
   const handleDeleteRecap = (year: number) => {
     if (confirm(`Delete recap for ${year}? This cannot be undone.`)) {
       deleteRecap(year);
       setStoredRecaps(getStoredRecaps());
-      toast({ title: 'Recap deleted' });
+      toast({ title: "Recap deleted" });
     }
   };
 
   const handleClearCache = () => {
     clearRecapCache();
-    toast({ title: 'Cache cleared' });
+    toast({ title: "Cache cleared" });
   };
 
   const handleExportData = () => {
@@ -123,14 +126,16 @@ const AdminPanel = () => {
       recaps: storedRecaps,
       exportedAt: new Date().toISOString(),
     };
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const blob = new Blob([JSON.stringify(data, null, 2)], {
+      type: "application/json",
+    });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
+    const a = document.createElement("a");
     a.href = url;
     a.download = `github-recap-export-${Date.now()}.json`;
     a.click();
     URL.revokeObjectURL(url);
-    toast({ title: 'Data exported' });
+    toast({ title: "Data exported" });
   };
 
   if (!isAuthenticated) {
@@ -153,16 +158,12 @@ const AdminPanel = () => {
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && handleLogin()}
+                onKeyDown={(e) => e.key === "Enter" && handleLogin()}
               />
               <Button onClick={handleLogin} className="w-full">
                 Login
               </Button>
-              <Button
-                variant="ghost"
-                onClick={() => navigate('/')}
-                className="w-full"
-              >
+              <Button variant="ghost" onClick={() => navigate("/")} className="w-full">
                 Back to Recap
               </Button>
             </CardContent>
@@ -186,7 +187,7 @@ const AdminPanel = () => {
             <h1 className="text-2xl font-bold text-foreground">Admin Panel</h1>
           </div>
           <div className="flex items-center gap-2">
-            <Button variant="ghost" onClick={() => navigate('/')}>
+            <Button variant="ghost" onClick={() => navigate("/")}>
               View Recap
             </Button>
             <Button variant="outline" onClick={handleLogout}>
@@ -203,8 +204,8 @@ const AdminPanel = () => {
             animate={{ opacity: 1 }}
             className={`p-4 rounded-lg border ${
               rateLimit.remaining < 20
-                ? 'bg-destructive/10 border-destructive/30'
-                : 'bg-primary/10 border-primary/30'
+                ? "bg-destructive/10 border-destructive/30"
+                : "bg-primary/10 border-primary/30"
             }`}
           >
             <div className="flex items-center gap-2">
@@ -230,9 +231,7 @@ const AdminPanel = () => {
               <RefreshCw className="w-5 h-5" />
               Generate Recap
             </CardTitle>
-            <CardDescription>
-              Fetch data from GitHub and generate a new recap
-            </CardDescription>
+            <CardDescription>Fetch data from GitHub and generate a new recap</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex items-center gap-4">
@@ -241,7 +240,7 @@ const AdminPanel = () => {
                 <Input
                   id="username"
                   value={settings.username}
-                  onChange={(e) => handleSettingChange('username', e.target.value)}
+                  onChange={(e) => handleSettingChange("username", e.target.value)}
                   placeholder="username"
                 />
               </div>
@@ -257,9 +256,7 @@ const AdminPanel = () => {
                 />
               </div>
             </div>
-            {error && (
-              <p className="text-sm text-destructive">{error}</p>
-            )}
+            {error && <p className="text-sm text-destructive">{error}</p>}
             <div className="flex gap-2">
               <Button
                 onClick={handleGenerateRecap}
@@ -292,9 +289,7 @@ const AdminPanel = () => {
               <Database className="w-5 h-5" />
               Stored Recaps
             </CardTitle>
-            <CardDescription>
-              Manage your generated recaps
-            </CardDescription>
+            <CardDescription>Manage your generated recaps</CardDescription>
           </CardHeader>
           <CardContent>
             {storedRecaps.length === 0 ? (
@@ -324,7 +319,7 @@ const AdminPanel = () => {
                         )}
                       </div>
                       <p className="text-sm text-muted-foreground">
-                        {recap.data.totalCommits} commits • Updated{' '}
+                        {recap.data.totalCommits} commits • Updated{" "}
                         {new Date(recap.updatedAt).toLocaleDateString()}
                       </p>
                     </div>
@@ -367,23 +362,24 @@ const AdminPanel = () => {
         <Card className="glass-elevated border-border/50">
           <CardHeader>
             <CardTitle>Display Settings</CardTitle>
-            <CardDescription>
-              Control what sections are visible in the recap
-            </CardDescription>
+            <CardDescription>Control what sections are visible in the recap</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid gap-4 sm:grid-cols-2">
               {[
-                { key: 'showHeatmap', label: 'Contribution Heatmap' },
-                { key: 'showLanguages', label: 'Language Distribution' },
-                { key: 'showRepositories', label: 'Top Repositories' },
-                { key: 'showInsights', label: 'Productivity Insights' },
-                { key: 'isPublic', label: 'Public Profile' },
-                { key: 'reducedMotion', label: 'Reduced Motion' },
-                { key: 'compactView', label: 'Compact View' },
-                { key: 'debugMode', label: 'Debug Mode' },
+                { key: "showHeatmap", label: "Contribution Heatmap" },
+                { key: "showLanguages", label: "Language Distribution" },
+                { key: "showRepositories", label: "Top Repositories" },
+                { key: "showInsights", label: "Productivity Insights" },
+                { key: "isPublic", label: "Public Profile" },
+                { key: "reducedMotion", label: "Reduced Motion" },
+                { key: "compactView", label: "Compact View" },
+                { key: "debugMode", label: "Debug Mode" },
               ].map(({ key, label }) => (
-                <div key={key} className="flex items-center justify-between p-3 rounded-lg bg-muted/20">
+                <div
+                  key={key}
+                  className="flex items-center justify-between p-3 rounded-lg bg-muted/20"
+                >
                   <Label htmlFor={key}>{label}</Label>
                   <Switch
                     id={key}
@@ -402,9 +398,7 @@ const AdminPanel = () => {
         <Card className="glass-elevated border-border/50">
           <CardHeader>
             <CardTitle>Data Management</CardTitle>
-            <CardDescription>
-              Export or manage your recap data
-            </CardDescription>
+            <CardDescription>Export or manage your recap data</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="p-4 rounded-lg bg-muted/20 border border-dashed border-border">
@@ -412,8 +406,8 @@ const AdminPanel = () => {
                 <strong>Database Connection:</strong> Not connected
               </p>
               <p className="text-xs text-muted-foreground">
-                Data is currently stored in localStorage. Connect to a database for persistent storage
-                across devices and proper backup capabilities.
+                Data is currently stored in localStorage. Connect to a database for persistent
+                storage across devices and proper backup capabilities.
               </p>
             </div>
             <Button variant="outline" onClick={handleExportData} className="w-full">

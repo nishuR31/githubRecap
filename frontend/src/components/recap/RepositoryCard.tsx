@@ -52,9 +52,7 @@ export const RepositoryCard = ({ repo, rank, delay = 0 }: RepositoryCardProps) =
         </div>
       </div>
 
-      <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
-        {repo.description}
-      </p>
+      <p className="text-sm text-muted-foreground mb-4 line-clamp-2">{repo.description}</p>
 
       <div className="flex items-center gap-2 text-primary">
         <GitBranch className="w-4 h-4" />

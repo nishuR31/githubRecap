@@ -34,7 +34,7 @@ export const ContributionHeatmap = ({ data }: ContributionHeatmapProps) => {
       className="glass-elevated rounded-2xl p-6 overflow-x-auto"
     >
       <h3 className="text-lg font-semibold mb-6 text-foreground">Contribution Activity</h3>
-      
+
       <div className="min-w-[800px]">
         {/* Month labels */}
         <div className="flex mb-2 pl-8">
@@ -72,8 +72,8 @@ export const ContributionHeatmap = ({ data }: ContributionHeatmapProps) => {
                 initial={{ opacity: 0, scale: 0.5 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
-                transition={{ 
-                  duration: 0.3, 
+                transition={{
+                  duration: 0.3,
                   delay: weekIndex * 0.01,
                 }}
                 className="flex flex-col gap-[3px]"
@@ -94,10 +94,7 @@ export const ContributionHeatmap = ({ data }: ContributionHeatmapProps) => {
         <div className="flex items-center justify-end gap-2 mt-4">
           <span className="text-xs text-muted-foreground">Less</span>
           {[0, 1, 2, 3, 4].map((level) => (
-            <div
-              key={level}
-              className={`w-3 h-3 rounded-sm ${getLevelClass(level)}`}
-            />
+            <div key={level} className={`w-3 h-3 rounded-sm ${getLevelClass(level)}`} />
           ))}
           <span className="text-xs text-muted-foreground">More</span>
         </div>

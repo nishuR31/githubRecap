@@ -43,10 +43,7 @@ export const LanguageChart = ({ languages }: LanguageChartProps) => {
             className="flex items-center justify-between"
           >
             <div className="flex items-center gap-3">
-              <div
-                className="w-3 h-3 rounded-full"
-                style={{ backgroundColor: lang.color }}
-              />
+              <div className="w-3 h-3 rounded-full" style={{ backgroundColor: lang.color }} />
               <span className="text-sm font-medium text-foreground">{lang.name}</span>
             </div>
             <div className="flex items-center gap-4">

@@ -11,5 +11,5 @@ export const fetchAndStoreGithubData = asyncHandler(async (req, res) => {
 
   // Save user and repos to your DB here...
 
-  return success(res, "Fetched and stored GitHub data",200,{ user, repos },);
+  return success(res, "Fetched and stored GitHub data", 200, { user, repos });
 });

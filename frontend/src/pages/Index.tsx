@@ -56,7 +56,7 @@ const Index = () => {
       } catch {}
     } else {
       await navigator.clipboard.writeText(url);
-      toast({ title: 'Link copied to clipboard!' });
+      toast({ title: "Link copied to clipboard!" });
     }
   };
 
@@ -69,24 +69,16 @@ const Index = () => {
         className="fixed top-4 left-4 right-4 z-50 flex justify-between items-center pointer-events-none"
       >
         <div className="pointer-events-auto">
-          <YearSelector
-            currentYear={selectedYear}
-            onYearChange={handleYearChange}
-          />
+          <YearSelector currentYear={selectedYear} onYearChange={handleYearChange} />
         </div>
         <div className="flex gap-2 pointer-events-auto">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={handleShare}
-            className="glass-elevated"
-          >
+          <Button variant="ghost" size="icon" onClick={handleShare} className="glass-elevated">
             <Share2 className="w-4 h-4" />
           </Button>
           <Button
             variant="ghost"
             size="icon"
-            onClick={() => navigate('/admin')}
+            onClick={() => navigate("/admin")}
             className="glass-elevated"
           >
             <Settings className="w-4 h-4" />
@@ -118,9 +110,7 @@ const Index = () => {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              The Numbers
-            </h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">The Numbers</h2>
             <p className="text-muted-foreground max-w-md mx-auto">
               Your engineering output, quantified and visualized.
             </p>
@@ -172,9 +162,7 @@ const Index = () => {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              Code Impact
-            </h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">Code Impact</h2>
             <p className="text-muted-foreground max-w-md mx-auto">
               Lines written, deleted, and the balance of creation.
             </p>
@@ -227,7 +215,7 @@ const Index = () => {
         <div className="container max-w-6xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-8">
             <LanguageChart languages={data.topLanguages} />
-            
+
             <div className="space-y-4">
               <motion.h3
                 initial={{ opacity: 0 }}
@@ -238,12 +226,7 @@ const Index = () => {
                 Top Repositories
               </motion.h3>
               {data.topRepositories.slice(0, 3).map((repo, index) => (
-                <RepositoryCard
-                  key={repo.name}
-                  repo={repo}
-                  rank={index + 1}
-                  delay={index * 0.1}
-                />
+                <RepositoryCard key={repo.name} repo={repo} rank={index + 1} delay={index * 0.1} />
               ))}
             </div>
           </div>
@@ -309,14 +292,10 @@ const Index = () => {
             viewport={{ once: true }}
             className="text-center mb-8"
           >
-            <h3 className="text-xl font-semibold text-foreground mb-2">
-              Your Engineering Focus
-            </h3>
-            <p className="text-sm text-muted-foreground">
-              The areas you invested your time in
-            </p>
+            <h3 className="text-xl font-semibold text-foreground mb-2">Your Engineering Focus</h3>
+            <p className="text-sm text-muted-foreground">The areas you invested your time in</p>
           </motion.div>
-          
+
           <div className="flex flex-wrap justify-center gap-3">
             {data.tags.map((tag, index) => (
               <TagBadge key={tag} tag={tag} delay={index * 0.1} />
@@ -335,12 +314,10 @@ const Index = () => {
             className="glass-elevated rounded-3xl p-12 border-gradient glow-primary"
           >
             <Zap className="w-12 h-12 text-primary mx-auto mb-6" />
-            <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-4">
-              Keep Building
-            </h2>
+            <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-4">Keep Building</h2>
             <p className="text-muted-foreground mb-8">
-              Every commit tells a story. Every line of code shapes your journey.
-              Here's to another year of shipping.
+              Every commit tells a story. Every line of code shapes your journey. Here's to another
+              year of shipping.
             </p>
             <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-primary text-primary-foreground font-medium">
               <span>Share Your Recap</span>
@@ -352,9 +329,7 @@ const Index = () => {
       {/* Footer */}
       <footer className="py-8 px-4 border-t border-border/50">
         <div className="container max-w-6xl mx-auto text-center">
-          <p className="text-sm text-muted-foreground">
-            Built with data, designed with purpose.
-          </p>
+          <p className="text-sm text-muted-foreground">Built with data, designed with purpose.</p>
         </div>
       </footer>
     </div>
