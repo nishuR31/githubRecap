@@ -17,7 +17,7 @@
     "envf": "^3.1.1",
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.0",
-    "nodemailer": "^8.0.1",
+    "nodemailer": "^8.0.4",
     "status-map": "^1.0.7"
   },
   "devDependencies": {
